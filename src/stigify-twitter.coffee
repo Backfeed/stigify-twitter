@@ -12,8 +12,10 @@ oauth = require 'oauth'
 twitter_bearer_token = null
 
 module.exports = (robot) ->
+  robot.messageRoom process.env.HUBOT_TWITTER_MENTION_ROOM, "Stigify twitter in da house! init!"
 
-  # robot.hear /foo/i, (msg) ->
+  robot.hear /stigtwitter/i, (msg) ->
+    robot.messageRoom process.env.HUBOT_TWITTER_MENTION_ROOM, "Stigify twitter in da house!"
   #   callContribution(robot)
     # postContributionToSlack(robot)
 
