@@ -12,12 +12,9 @@ oauth = require 'oauth'
 twitter_bearer_token = null
 
 module.exports = (robot) ->
-  robot.messageRoom process.env.HUBOT_TWITTER_MENTION_ROOM, "Stigify twitter in da house! init!"
 
   robot.hear /stigtwitter/i, (msg) ->
     robot.messageRoom process.env.HUBOT_TWITTER_MENTION_ROOM, "Stigify twitter in da house!"
-  #   callContribution(robot)
-    # postContributionToSlack(robot)
 
   robot.brain.data.twitter_mention ?= {}
 
@@ -73,19 +70,20 @@ twitter_search = (robot) ->
         robot.brain.data.twitter_mention.last_tweet = tweets.statuses[0].id_str
 
         lastTweet = tweets.statuses[0]
-        message = "Tweet: #{lastTweet.text} - @#{lastTweet.user.screen_name} http://twitter.com/#{lastTweet.user.screen_name}/status/#{lastTweet.id_str}"
 
-        callContribution(robot, message)
+        callContribution(robot, lastTweet)
 
 
-callContribution = (robot, message) ->
+callContribution = (robot, lastTweet) ->
 
-  robot.messageRoom process.env.HUBOT_TWITTER_MENTION_ROOM, "callContribution!"
+  twitterHandle = lastTweet.user.screen_name
+  
+  message = "New contribution submitted\nTweet: #{lastTweet.text} - @#{twitterHandle} http://twitter.com/#{lastTweet.user.screen_name}/status/#{lastTweet.id_str}"
 
   data = JSON.stringify
-    channelId: "C0BSMN43U"
+    channelId: process.env.STIGIFY_TWITTER_SLACK_CHANNEL_ID
     type: "tweet"
-    contributors: [{ id: "U06PXNST0", percentage: 100 }]
+    contributors: [{ twitterHandle: twitterHandle, percentage: 100 }]
     title: message
     description: ""
     slackAccessToken: process.env.HUBOT_SLACK_TOKEN
