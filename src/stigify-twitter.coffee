@@ -78,13 +78,13 @@ callContribution = (robot, lastTweet) ->
 
   twitterHandle = lastTweet.user.screen_name
   
-  message = "New contribution submitted\nTweet: #{lastTweet.text} - @#{twitterHandle} http://twitter.com/#{lastTweet.user.screen_name}/status/#{lastTweet.id_str}"
+  contributionTitle = "Tweet: #{lastTweet.text} - @#{twitterHandle} http://twitter.com/#{lastTweet.user.screen_name}/status/#{lastTweet.id_str}"
 
   data = JSON.stringify
     channelId: process.env.STIGIFY_TWITTER_SLACK_CHANNEL_ID
     type: "tweet"
     contributors: [{ twitterHandle: twitterHandle, percentage: 100 }]
-    title: message
+    title: contributionTitle
     description: ""
     slackAccessToken: process.env.HUBOT_SLACK_TOKEN
 
@@ -101,7 +101,14 @@ callContribution = (robot, lastTweet) ->
         console.log("Encountered an error on callContribution: #{err}")
         return
 
-      console.log("callContributionCB: body", body)
+      newContribution = JSON.parse(body)
+
+      console.log(newContribution)
+
+      contributionId = newContribution['id']
+      
+      message = "New contribution submitted" + "\n" + contributionId + "\n" + contributionTitle
+
       robot.messageRoom process.env.HUBOT_TWITTER_MENTION_ROOM, message
 
 
@@ -109,7 +116,7 @@ callContribution = (robot, lastTweet) ->
 # The following code will trigger slack messages manually. it's not used anywhere for now.
 # postContributionToSlack = (robot) ->
 #   robot.messageRoom process.env.HUBOT_TWITTER_MENTION_ROOM, "postContributionToSlack!"
-#   params = getSlackParams();
+#   params = getSlackParams()
 
 #   robot.http("https://slack.com/api/chat.postMessage?#{params}")
 #     .header('Content-Type', 'application/json')
