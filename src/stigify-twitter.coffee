@@ -106,6 +106,10 @@ callContribution = (robot, lastTweet) ->
       console.log(newContribution)
 
       contributionId = newContribution['id']
+
+      if (!contributionId)
+        console.log("#{twitterHandle} is not a backfeed member, not posting tweet as contribution!")
+        return
       
       message = "New contribution submitted" + "\n" + contributionId + "\n" + contributionTitle
 

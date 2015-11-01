@@ -1,7 +1,7 @@
 {
   "name": "hubot-stigify-twitter",
   "description": "Make Contribution from Twitter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Yaniv Keinan <yanivkeinan@gmail.com>",
   "license": "MIT",
 
