@@ -96,6 +96,7 @@ callContribution = (robot, lastTweet) ->
     .header('Content-Type', 'application/json')
     .header('User-Agent', 'DEAP')
     .header('x-access-token', process.env.BF_X_ACCESS_TOKEN)
+    .header('appname', 'stig')
     .post(data) (err, res, body) ->
       if err
         console.log("Encountered an error on callContribution: #{err}")
